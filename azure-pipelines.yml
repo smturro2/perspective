@@ -233,7 +233,7 @@ jobs:
       displayName: "Which python"
 
     - script: |
-        python -m pip install numpy pyarrow==0.15.1
+        python -m pip install wheel numpy pyarrow==0.15.1
       displayName: "Python deps"
 
     - script: npm install -g yarn
