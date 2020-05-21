@@ -118,9 +118,14 @@ jobs:
 
     # Start a new virtual environment for the Perspective wheel, so as to
     # isolate it from previously installed dependencies
+    - bash: python -m pip install virtualenv && python -m virtualenv ./temp_venv
+      condition: and(succeeded(), ne(variables['manylinux_flag'], ''), eq(variables['python_flag'], '--python2'))
+      displayName: "Install virtualenv (Python 2)"
+      
+    # Use venv for python3
     - bash: python -m venv ./temp_venv
-      condition: and(succeeded(), ne(variables['manylinux_flag'], ''))
-      displayName: "Create virtualenv"
+      condition: and(succeeded(), ne(variables['manylinux_flag'], ''), eq(variables['python_flag'], ''))
+      displayName: "Create virtualenv (Python 3)"
 
     - bash: source ./temp_venv/bin/activate
       condition: and(succeeded(), ne(variables['manylinux_flag'], ''))
@@ -233,7 +238,7 @@ jobs:
       displayName: "Which python"
 
     - script: |
-        python -m pip install wheel numpy pyarrow==0.15.1
+        python -m pip install delocate wheel numpy pyarrow==0.15.1
       displayName: "Python deps"
 
     - script: npm install -g yarn
