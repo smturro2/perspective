@@ -120,7 +120,7 @@ jobs:
     # isolate it from previously installed dependencies
     - bash: python -m pip install virtualenv && python -m virtualenv ./temp_venv
       condition: and(succeeded(), ne(variables['manylinux_flag'], ''), eq(variables['python_flag'], '--python2'))
-      displayName: "Install virtualenv (Python 2)"
+      displayName: "Create virtualenv (Python 2)"
       
     # Use venv for python3
     - bash: python -m venv ./temp_venv
@@ -137,7 +137,7 @@ jobs:
       displayName: 'Verify that Perspective is not installed'
 
     # Install the manylinux wheel
-    - bash: python -m pip install --force-reinstall $(System.DefaultWorkingDirectory)/python/perspective/dist/*.whl
+    - bash: python -m pip install --force-reinstall $(System.DefaultWorkingDirectory)/python/perspective/dist/*_$(artifact_name).whl
       condition: and(succeeded(), ne(variables['manylinux_flag'], ''))
       displayName: 'Install from wheel'
 
@@ -267,8 +267,12 @@ jobs:
 
     # Start a new virtual environment for the Perspective wheel, so as to
     # isolate it from previously installed dependencies
+    - bash: python -m pip install virtualenv && python -m virtualenv ./temp_venv
+      displayName: "Create virtualenv (Python 2)"
+      
+    # Use venv for python3
     - bash: python -m venv ./temp_venv
-      displayName: "Create virtualenv"
+      displayName: "Create virtualenv (Python 3)"
 
     - bash: source ./temp_venv/bin/activate
       displayName: "Activate virtualenv"
