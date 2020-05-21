@@ -110,7 +110,7 @@ jobs:
         summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
 
     # Build a python wheel for Manylinux
-    - bash: yarn _wheel_python --ci $(python_flag) $(manylinux_flag)
+    - bash: yarn _wheel_python --platform manylinux --ci $(python_flag) $(manylinux_flag)
       condition: and(succeeded(), ne(variables['manylinux_flag'], ''))
       displayName: 'Build wheel'
       env:
@@ -257,10 +257,8 @@ jobs:
         summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
 
     # Build a python wheel for Mac 10.14
-    - bash: yarn _wheel_python --ci $(python_flag) $(manylinux_flag)
+    - bash: yarn _wheel_python --ci $(python_flag) --platform osx
       displayName: 'Build wheel'
-      env:
-        PSP_DOCKER: 1
 
     # Start a new virtual environment for the Perspective wheel, so as to
     # isolate it from previously installed dependencies
